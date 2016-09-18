@@ -21,7 +21,16 @@ _uOF.twitch = {
 	}
 }
 
-document.querySelectorAll('button').forEach(btn => {
+const $ = (x) => {
+	const selected = document.querySelectorAll(x);
+	if(selected.length === 0) return [];
+	const newArray = [];
+	for(let i = 0, len = selected.length; i < len; ++i)
+		newArray.push(selected[i]);
+	return newArray;
+};
+
+$('button').forEach(btn => {
 	btn.onclick = function() {
 
 		if(document.querySelector('.selected')) {
@@ -31,19 +40,19 @@ document.querySelectorAll('button').forEach(btn => {
 		this.classList.add('selected');
 
 		if(this.textContent == 'All') {
-			document.querySelectorAll('.channels > :not(.empty)').
+			$('.channels > :not(.empty)').
 				forEach(chn => chn.classList.remove('hidden'));
 		}
 		else if(this.textContent == 'Online') {
-			document.querySelectorAll('.online').
+			$('.online').
 				forEach(chn => chn.classList.remove('hidden'));
-			document.querySelectorAll('.channels > :not(.online)').
+			$('.channels > :not(.online)').
 				forEach(chn => chn.classList.add('hidden'));
 		}
 		else {
-			document.querySelectorAll('.channels > :not(.online)').
+			$('.channels > :not(.online)').
 				forEach(chn => chn.classList.remove('hidden'));
-			document.querySelectorAll('.online').
+			$('.online').
 				forEach(chn => chn.classList.add('hidden'));
 		}
 	};
@@ -54,7 +63,7 @@ document.getElementsByTagName('input')[0].onkeyup = (e) => {
 	
 	const regx = RegExp(value, 'i');
 				
-	document.querySelectorAll('.channels > *').forEach(x => {
+	$('.channels > *').forEach(x => {
 		if(x.dataset.hasOwnProperty('name') && x.dataset.name.match(regx) === null)
 			x.classList.add('filteredout');
 		else
@@ -124,12 +133,9 @@ _uOF.getStreams = () => {
 	_uOF.get(_uOF.twitch.getUrl(_uOF.streamers, 'streams'), (err, data) => {
 		if(err) return console.error(err.message);
 
-		console.log(JSON.parse(data));
-		console.log(_uOF.streamers);
 		JSON.parse(data).streams.forEach(stream => {
 			_uOF.streamers.splice(_uOF.streamers.indexOf(stream.channel.name), 1);
 			_uOF.addStreamer(stream.channel, 'online');
-			console.log(_uOF.streamers);
 		});
 
 		_uOF.streamers.forEach(channel => _uOF.getChannel(channel));
