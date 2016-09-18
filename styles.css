@@ -107,6 +107,10 @@ button:nth-child(2) {
     height: 0;
 }
 
+#never-hidden {
+    display: inline !important;
+}
+
 .channels img {
     width: 50px;
     height: 50px;
@@ -182,6 +186,10 @@ a.not-exist {
 
 a.not-exist img {
     opacity: 0;
+}
+
+.fix-footer {
+    height: 100%;
 }
 
 footer {
