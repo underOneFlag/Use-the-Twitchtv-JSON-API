@@ -9,13 +9,22 @@ html, body {
     height: 100%;
 }
 
-.empty, .hidden { display: none; }
+.empty, .hidden { display: none !important; }
 
 body {
     padding-top: 10px;
-    max-width: 480px;
+    width: 300px;
     margin: 0 auto;
     background-color: #ffa898;
+    display: table;
+}
+
+body > * {
+    display: table-row;
+}
+
+body > section:first-child {
+    height: 0;
 }
 
 body > :not(.channels) {
@@ -34,10 +43,6 @@ section:first-of-type {
     background-color: #fe7a71;
     width: 100%;
     height: 3em;
-}
-
-section:last-of-type {
-    padding: 15px;
 }
 
 button {
@@ -75,6 +80,7 @@ button:nth-child(2) {
 
 .search {
     position: relative;
+    padding: 0 15px;
 }
 
 .search:after {
@@ -82,17 +88,23 @@ button:nth-child(2) {
     height: 56px;
     line-height: 56px;
     position: absolute;
-    left: 8%;
+    top: 0;
+    left: 0;
+    margin-left: 30px;
 }
 
 .search input {
-    width: 90%;
+    width: 100%;
     border-radius: 20px;
     border: 1px lightgrey solid;
-    margin: 15px;
+    margin: 15px 0;
     line-height: 24px;
     outline: none;
     padding: 0 10px 0 35px;
+}
+
+.channels { 
+    height: 0;
 }
 
 .channels img {
@@ -105,15 +117,12 @@ button:nth-child(2) {
 
 .channels a {
     position: relative;
-}
-
-section a {
     width: 100%;
     height: 60px;
     text-decoration: none;
     color: #fe7a71;
     display: block;
-    padding-right: 20px;
+    padding: 0 25px 0 15px;
 }
 
 section a:visited {
@@ -143,7 +152,7 @@ section a:visited {
     height: 60px;
     line-height: 60px;
     top: 0;
-    right: 0;
+    right: 6px;
 }
 
 .offline:after {
@@ -154,11 +163,15 @@ section a:visited {
     height: 60px;
     line-height: 60px;
     top: 0;
-    right: 0;
+    right: 6px;
 }
 
 .offline .desc {
     display: none;
+}
+
+.filteredout {
+    display: none !important;
 }
 
 a.not-exist {
@@ -173,12 +186,16 @@ a.not-exist img {
 
 footer {
     color: white;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
     margin: 10px 0;
     font-size: 14px;
+}
+
+footer > :first-child {
+    padding-top: 10px;
+}
+
+footer > :last-child {
+    padding-bottom: 10px;
 }
 
 footer a {
@@ -191,4 +208,14 @@ footer a:visited {
 
 footer a:hover {
     color: #fdd;
+}
+
+@media only screen and (max-width: 500px) {
+    body {
+        width: 100%;
+        padding-top: 0;
+    }
+    .channels {
+        height: 100%;
+    }
 }

@@ -23,7 +23,6 @@ _uOF.twitch = {
 
 document.querySelectorAll('button').forEach(btn => {
 	btn.onclick = function() {
-		if(this.classList.contains('selected'))	return
 
 		if(document.querySelector('.selected')) {
 			document.querySelector('.selected').classList.remove('selected');
@@ -50,29 +49,16 @@ document.querySelectorAll('button').forEach(btn => {
 	};
 });
 
-document.getElementsByTagName('input')[0].onkeyup = (event) => {
-	const value = event.target.value;
+document.getElementsByTagName('input')[0].onkeyup = (e) => {
+	const value = e.target.value;
 	
-	if(value.length < 2) {
-		document.querySelector('button').
-			onclick.call(document.querySelector('button'));
-		return
-	}
-
 	const regx = RegExp(value, 'i');
-	console.log(regx);
-	document.querySelectorAll('.channels > *').
-		forEach(x => x.classList.add('hidden'));
-
-	const option = document.getElementsByClassName('selected');
-	if(option.length > 0) option[0].classList.remove('selected');
-	
-	_uOF.streamers.filter(x => {
-		console.log(x, regx, x.match(regx));
-		return x.match(regx);
-	}).forEach(x => {
-		document.querySelector('[data-name=' + x + ']').
-			classList.remove('hidden');
+				
+	document.querySelectorAll('.channels > *').forEach(x => {
+		if(x.dataset.hasOwnProperty('name') && x.dataset.name.match(regx) === null)
+			x.classList.add('filteredout');
+		else
+			x.classList.remove('filteredout');
 	});
 };
 
@@ -81,11 +67,11 @@ _uOF.streamers = [
 	"storbeck", "habathcx", "RobotCaleb", "noobs2ninjas", "comster404"
 ].map(x => x.toLowerCase());
 
-_uOF.sectionElement = document.getElementsByTagName('section')[1];
-_uOF.chnElement = document.getElementsByClassName('empty')[0];
 
 _uOF.addStreamer = (channel, status) => {
-	const channelElement = _uOF.chnElement.cloneNode(true);
+	const sectionElement = document.getElementsByTagName('section')[1];
+	const chnElement = document.getElementsByClassName('empty')[0];
+	const channelElement = chnElement.cloneNode(true);
 	if(channel.url) channelElement.href = channel.url;
 	channelElement.classList.remove('empty');
 	channelElement.classList.add(status);
@@ -100,10 +86,17 @@ _uOF.addStreamer = (channel, status) => {
 	channelElement.classList.remove('empty');
 	
 	if(status == 'not-exist') {
-		_uOF.sectionElement.insertAdjacentElement('beforeend', channelElement);
+		sectionElement.insertAdjacentElement('beforeend', channelElement);
+	}
+	else if(status =='offline') {
+		const notExistEle = document.querySelector('.not-exist');
+		if(notExistEle)
+			notExistEle.insertAdjacentElement('beforebegin', channelElement);
+		else
+			sectionElement.insertAdjacentElement('beforeend', channelElement);			
 	}
 	else {
-		_uOF.sectionElement.insertAdjacentElement('afterbegin', channelElement);
+		sectionElement.insertAdjacentElement('afterbegin', channelElement);
 	}
 };
 
